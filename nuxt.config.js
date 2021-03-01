@@ -1,5 +1,10 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  vue: {
+    devtools: true
+  },
+  // mode: 'spa',
+  srcDir: 'src/',
   head: {
     title: 'media-nuxt',
     htmlAttrs: {
@@ -17,6 +22,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '@/assets/css/style.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
