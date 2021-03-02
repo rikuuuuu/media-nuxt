@@ -1,8 +1,11 @@
+import { static } from "process";
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   vue: {
     devtools: true
   },
+  target: 'static',
   // mode: 'spa',
   srcDir: 'src/',
   head: {
