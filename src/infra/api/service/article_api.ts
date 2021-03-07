@@ -59,7 +59,7 @@ class ArticleAPI implements IArticleRepository {
             req.offset = offset;
             const writer: BufferWriter | Writer = Writer.create();
             // Pager.encode(req, writer).finish()
-            this.apiClient.post("/api.ArticleService/GetAll", Pager.encode(req, writer).finish())
+            this.apiClient.post("/api.ArticleService/GetAll", req)
             .then((binary: any) => {
                 const res = ArticleList.decode(binary);
                 const resConverted: ArticleConvertResponseList = ArticleConvertResponseList.from(res);

@@ -10,12 +10,12 @@ interface IApiClient {
 class ApiClient implements IApiClient {
     // http://localhost:8080/twirp
     // http://127.0.0.1:8080/twirp
-    private baseURL: string = "http://127.0.0.1:8080/twirp"
+    private baseURL: string = "http://localhost:8080/twirp"
 
     public post(path: string, body: any): Promise<any> {
         const headers = {
             'Accept': '*/*',
-            'Content-Type': 'application/protobuf',
+            'Content-Type': 'application/json',
         };
         
         return this.request(path, headers, body);
@@ -37,11 +37,11 @@ class ApiClient implements IApiClient {
         console.log(headers)
 
         const option: RequestInit = {
-            cache: "no-cache",
+            // cache: "no-cache",
             body,
             method,
-            headers: headers,
-            mode: 'cors',
+            headers,
+            // mode: 'cors',
         };
 
         // return axios.post(this.baseURL + path, option)
