@@ -1,4 +1,4 @@
-import { entity } from "../rpc/api";
+// import { entity } from "../rpc/api";
 
 class AdminUserConvertResponse {
     public static from(from: any): AdminUserConvertResponse {
@@ -21,11 +21,11 @@ class AdminUserConvertResponse {
 
 class AdminUserConvertResponseList {
 
-    public static from(from: entity.AdminUserList): AdminUserConvertResponseList {
+    public static from(from: any): AdminUserConvertResponseList {
         const items: AdminUserConvertResponse[] = [];
 
-        from.items.map((item, index) => {
-            return items.push(AdminUserConvertResponse.from(item as entity.Article))
+        from.map((item: any, index: any) => {
+            return items.push(AdminUserConvertResponse.from(item as any))
         });
 
         return new AdminUserConvertResponseList(

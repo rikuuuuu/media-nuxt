@@ -1,21 +1,21 @@
 <template>
-    <div>
-        <Header />
-        <div class="LoginWrapper">
-            <div class="LoginCardWrapper">
-                <div class="LoginFormWrapper">
-                    <form>
-                        <div class="LoginLabelWrapeer">
-                            <p class="LoginLabel">編集</p>
-                        </div>
-                        <div class="LoginNameWrapper">
-                            <input class="InputDefault" type=" text" placeholder="ユーザーネーム" />
-                        </div>
-                        <div class="LoginBtnWrapper">
-                            <BtnDefault :btnText="'更新'" :btnClick="update" />
-                        </div>
-                    </form>
-                </div>
+    <div class="LoginWrapper">
+        <div class="LoginCardWrapper">
+            <div class="LoginFormWrapper">
+                <form>
+                    <div class="LoginLabelWrapeer">
+                        <p class="LoginLabel">編集</p>
+                    </div>
+                    <div class="LoginNameWrapper">
+                        <input class="InputDefault" v-model="user.username" type="text" placeholder="ユーザーネーム" />
+                    </div>
+                    <div class="LoginBtnWrapper" @click="update">
+                        <BtnDefault :btnText="'更新する'" />
+                    </div>
+                    <div class="LoginBtnWrapper" @click="logout">
+                        <BtnDefault :btnText="'ログアウト'" />
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -26,14 +26,24 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-
+        // username: "",
     }
   },
   props: [
+    'user'  
   ],
+  created() {
+
+  },
+  mounted() {
+
+  },
   methods: {
     update() {
-          console.log('updateClick')
+        console.log('updateClick', this.user)
+    },
+    logout() {
+        this.$store.dispatch('admin/logout')
     }
   }
 })

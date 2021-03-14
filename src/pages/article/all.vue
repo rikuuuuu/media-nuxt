@@ -6,13 +6,13 @@
                 <div class="LeftWrapper">
                     <div class="LeftContentsWrapper">
                         <div class="ArticleCardsWrapper">
-                            <div class="ArticleCardWrapper">
-                                <ArticleCard />
+                            <div class="ArticleCardWrapper" v-for="(article, index) in articles" :key="index">
+                                <ArticleCard :article=article />
                             </div>
                         </div>
                     </div>
                 </div>
-                <MainRight />
+                <MainRight :user=user />
             </div>
         </div>
         <Footer />
@@ -21,17 +21,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
 export default Vue.extend({
     data(){
         return {
-
         }
+    },
+    components: {
     },
     created() {
 
     },
     mounted() {
         this.$store.dispatch('article/getAll')
+        this.$store.dispatch('admin/getMe')
     },
     methods: {
 
@@ -39,6 +42,9 @@ export default Vue.extend({
     computed: {
         articles() {
             return this.$store.getters['article/articles']
+        },
+        user() {
+            return this.$store.getters['admin/user']
         }
     },
 })
@@ -54,7 +60,7 @@ export default Vue.extend({
 
 .ArticleContentWrapper {
     margin: auto;
-    width: 70%;
+    width: 80%;
     height: -webkit-fill-available;
     display: block;
 }
@@ -75,13 +81,18 @@ export default Vue.extend({
 }
 
 .ArticleCardWrapper {
+    background-color: #FFF;
+    border-radius: 5px;
+    overflow: hidden;
     width: 100%;
+    box-shadow: 0 0 4px 0 #E0E0E0;
     margin-bottom: 30px;
 }
 
 @media (min-width: 768px) {
     .ArticleContentWrapper {
         display: flex;
+        width: 70%;
     }
 
     .LeftWrapper {

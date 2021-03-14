@@ -20,11 +20,17 @@ time, mark, audio, video {
 }
 
 a {
-  margin:0;
-  padding:0;
-  font-size:100%;
-  vertical-align:baseline;
-  background:transparent;
+  display: block;
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  /* vertical-align: baseline; */
+  background: transparent;
+  text-decoration: none;
+  color: #333;
+}
+
+a:visited {
   text-decoration: none;
 }
 
@@ -36,6 +42,7 @@ body {
   /* font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro", "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "メイリオ", sans-serif; */
   /* font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, ".SFNSDisplay-Regular", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif; */
   font-weight: 500;
+  color: #333;
 }
 button,
 input,
@@ -60,6 +67,9 @@ textarea {
 /* color */
 /* 5da67f */
 /* 7097C3 */
+
+/* 紺的な */
+/* 35495e */
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -106,7 +116,6 @@ p {
 
 img {
   width: 100%;
-  border-radius: 5px;
 }
 
 input::placeholder {
@@ -114,6 +123,7 @@ input::placeholder {
 }
 
 .InputDefault {
+  width: 100%;
   background: #FFF;
   padding: 10px;
   color: #333;
@@ -129,7 +139,7 @@ input::placeholder {
   background-color: #FFF;
   background-color: #5da67f;
   color: #FFF;
-  border-radius: 10px;
+  border-radius: 5px;
   border: none;
   cursor: pointer;
   display: block;

@@ -3,8 +3,10 @@
         <Header />
         <div class="MainWrapper">
             <div class="ArticleContentWrapper">
-                <div class="LeftWrapper"></div>
-                <MainRight />
+                <div class="LeftWrapper">
+                    <Article v-if=article :article=article />
+                </div>
+                <MainRight :user=user />
             </div>
         </div>
         <Footer />
@@ -14,7 +16,26 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
-    
+    data() {
+        return {
+        }
+    },
+    created() {
+
+    },
+    mounted() {
+        const articleID = this.$route.params.id
+        this.$store.dispatch('article/get', { articleID })
+        this.$store.dispatch('admin/getMe')
+    },
+    computed: {
+        article() {
+            return this.$store.getters['article/article']
+        },
+        user() {
+            return this.$store.getters['admin/user']
+        }
+    },
 })
 </script>
 

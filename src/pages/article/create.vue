@@ -1,6 +1,7 @@
 <template>
     <div>
         <Header />
+        <ArticleCreate />
         <Footer />
     </div>
 </template>

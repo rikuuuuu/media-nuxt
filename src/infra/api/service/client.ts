@@ -2,7 +2,13 @@ import "whatwg-fetch";
 import axios from "axios";
 
 interface IApiClient {
+    get(path: string): Promise<any>;
+
     post(path: string, body: any): Promise<any>;
+
+    login(path: string, body: any): Promise<any>;
+
+    getWithToken(path: string, token: string): Promise<any>;
 
     postWithToken(path: string, token: string, body: any): Promise<any>;
 }
@@ -10,56 +16,123 @@ interface IApiClient {
 class ApiClient implements IApiClient {
     // http://localhost:8080/twirp
     // http://127.0.0.1:8080/twirp
-    private baseURL: string = "http://localhost:8080/twirp"
+    // http://ec2-18-177-59-95.ap-northeast-1.compute.amazonaws.com/twirp
+    private baseURL: string = "http://ec2-18-177-59-95.ap-northeast-1.compute.amazonaws.com"
 
-    public post(path: string, body: any): Promise<any> {
+    public get(path: string): Promise<any> {
         const headers = {
-            'Accept': '*/*',
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
         };
         
-        return this.request(path, headers, body);
+        return this.getRequest(path, headers);
+    }
+
+    public post(path: string, body: any): Promise<any> {
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        };
+        
+        return this.postRequest(path, headers, body);
+    }
+
+    public login(path: string, body: any): Promise<any> {
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        };
+        
+        return this.loginRequest(path, headers, body);
+    }
+
+    public getWithToken(path: string, token: string): Promise<any> {
+        return this.getWithAuth(path, token)
     }
 
     public postWithToken(path: string, token: string, body: any): Promise<any> {
         const headers = {
-            'Accept': 'application/protobuf',
-            'Content-Type': 'application/protobuf',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token,
         };
 
-        return this.request(path, headers, body);
+        return this.postRequest(path, headers, body);
     }
 
-    private request(path: string, headers: any, body: any): Promise<any> {
-        const method = "POST";
+    private async postRequest(path: string, headers: any, body: any): Promise<any> {
 
-        console.log(headers)
+        try {
+            const res = await axios.post(this.baseURL + path, body, headers);
+            return res.data;
+        } catch (error) {
+            console.log(error);
+            return error
+        }
 
-        const option: RequestInit = {
-            // cache: "no-cache",
-            body,
-            method,
-            headers,
-            // mode: 'cors',
-        };
+        // const method = "POST";
 
-        // return axios.post(this.baseURL + path, option)
-        //     .then((res) => {
-        //         console.log(res.data)
-        //         return res.data
-        //     })
-        //     .catch((error) => {
-        //         console.log(error)
-        //     })
+        // const option: RequestInit = {
+        //     body,
+        //     method,
+        //     headers,
+        //     mode: 'cors',
+        // };
 
-        return fetch(this.baseURL + path, option)
-            .then((res: Response): Promise<any> => {
-                return res.arrayBuffer();
-            })
-            .then((buffer: any): any => {
-                return new Uint8Array(buffer);
+        // const res = await fetch(this.baseURL + path, option);
+        // console.log("res", res);
+        // const buffer = await res.arrayBuffer();
+        // console.log("buffer", buffer);
+        // return new Uint8Array(buffer);
+
+    }
+
+    private async getRequest(path: string, headers: any): Promise<any> {
+
+        try {
+            const res = await axios.get(this.baseURL + path, headers);
+            return res.data;
+        } catch (error) {
+            console.log(error);
+            return error
+        }
+
+    }
+
+    private async getWithAuth(path: string, token: string): Promise<any> {
+
+        try {
+            const res = await axios.get(this.baseURL + path, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
             });
+            return res.data;
+        } catch (error) {
+            console.log(error);
+            return error
+        }
+
+    }
+
+    private async loginRequest(path: string, headers: any, body: any): Promise<any> {
+
+        let params = new URLSearchParams();
+        params.append('username', body.username);
+        params.append('password', body.password);
+
+        if (!body.username) {
+            console.log("not username")
+            return
+        }
+
+        try {
+            const res = await axios.post(this.baseURL + path, params, headers);
+            return res.data;
+        } catch (error) {
+            console.log(error);
+            return error
+        }
 
     }
 }

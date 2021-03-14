@@ -13,9 +13,15 @@
                 </div>
             </div>
             <div class="LoginLinkWrapper">
-                <a href="/admin/login">
+                <nuxt-link v-if="!Object.keys(user).length" to="/admin/login">
                     <BtnDefault :btnText="'ログイン'" />
-                </a>
+                </nuxt-link>
+                <nuxt-link class="MypageBtn" v-if="Object.keys(user).length" :to="{ name: 'admin-update-id', params: { id: user.id }}">
+                    <BtnDefault :btnText="'マイページ'" />
+                </nuxt-link>
+                <nuxt-link v-if="Object.keys(user).length" to="/article/create">
+                    <BtnDefault :btnText="'投稿する'" />
+                </nuxt-link>
             </div>
         </div>
     </div>
@@ -31,6 +37,7 @@ export default Vue.extend({
         }
     },
     props: [
+        'user'
     ],
     methods: {
     }
@@ -73,6 +80,10 @@ export default Vue.extend({
 
 .InfoText {
     font-size: 14px;
+}
+
+.MypageBtn {
+    margin-bottom: 30px;
 }
 
 @media (min-width: 768px) {

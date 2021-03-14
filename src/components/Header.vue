@@ -1,7 +1,7 @@
 <template>
     <div class="HeaderWrapper">
         <div class="TitleWrapper">
-            <a class="TitleText" href="/article" >Python and Vue Blog</a>
+            <nuxt-link class="TitleText" to="/article/all" >Python and Vue Blog</nuxt-link>
         </div>
     </div>
 </template>

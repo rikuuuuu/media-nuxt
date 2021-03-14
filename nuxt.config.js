@@ -28,6 +28,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '@/plugins/marked'},
+    { src: '@/plugins/vue-mavon-editor', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -41,8 +43,45 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    // '@nuxtjs/axios',
+    // '@nuxtjs/auth'
+    'cookie-universal-nuxt',
+    '@nuxtjs/toast',
   ],
-
+  toast: {
+    position: 'top-right',
+    duration: 2000
+  },
+  // auth: {
+  //   redirect: {
+  //     login: '/admin/login',
+  //     logout: '/admin/login',
+  //     callback: '/callback',  // コールバックURL（各プロバイダで設定したものと同じPathにする）
+  //     home: '/admin/login',
+  //   },
+  //   strategies: {
+  //     local: {
+  //       token: {
+  //         // property: 'token',
+  //         required: false,
+  //         type: false
+  //       },
+  //       endpoints: {
+  //         login: { url: '/api/auth/login', method: 'post' },
+  //         logout: { url: '/api/auth/logout', method: 'post' },
+  //         user: { url: '/api/auth/user', method: 'get' }
+  //       }
+  //     },
+  //     auth0: {
+  //       domain: 'domain.auth0.com',
+  //       clientId: '....',
+  //       audience: 'https://my-api-domain.com/'
+  //     }
+  //   }
+  // },
+  // router: {
+  //   middleware: 'auth'
+  // },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }

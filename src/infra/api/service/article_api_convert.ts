@@ -29,13 +29,35 @@ class ArticleConvertResponse {
     };
 }
 
+// twirp sample
+// class ArticleConvertResponseList {
+
+//     public static from(from: entity.ArticleList): ArticleConvertResponseList {
+//         const items: ArticleConvertResponse[] = [];
+
+//         from.items.map((item, index) => {
+//             return items.push(ArticleConvertResponse.from(item as entity.Article))
+//         });
+
+//         return new ArticleConvertResponseList(
+//             items,
+//         )
+//     };
+
+//     constructor(
+//         public readonly items: ArticleConvertResponse[],
+//     ) {
+//     };
+
+// }
+
 class ArticleConvertResponseList {
 
-    public static from(from: entity.ArticleList): ArticleConvertResponseList {
+    public static from(from: any): ArticleConvertResponseList {
         const items: ArticleConvertResponse[] = [];
 
-        from.items.map((item, index) => {
-            return items.push(ArticleConvertResponse.from(item as entity.Article))
+        from.map((item: any, index: any) => {
+            return items.push(ArticleConvertResponse.from(item as any))
         });
 
         return new ArticleConvertResponseList(

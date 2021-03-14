@@ -1,40 +1,39 @@
 <template>
-    <a href="">
-        <div class="ArticleCardWrapper">
+    <nuxt-link :to=article.id>
+        <div class="">
             <div class="ImgWrapper">
                 <img src="/fog.jpg" alt="">
             </div>
             <div class="ContentWrapper">
                 <div class="TitleWrapper">
                     <div class="Title">
-                        {{"title"}}
+                        {{ article.title }}
                     </div>
                 </div>
                 <div class="CreatedWrapper">
                     <div class="Created">
-                        {{"createdat"}}
+                        {{ article.createdAt }}
                     </div>
                 </div>
             </div>
         </div>
-    </a>
+    </nuxt-link>
 </template>
 
 <script>
 export default {
-    
+    data() {
+        return {
+            
+        }
+    },
+    props: [
+        'article',
+    ]
 }
 </script>
 
 <style scoped>
-
-.ArticleCardWrapper {
-    background-color: #FFF;
-    border-radius: 5px;
-    overflow: hidden;
-    width: 100%;
-    box-shadow: 0 0 4px 0 #E0E0E0;
-}
 
 .ContentWrapper {
     padding: 10px;
@@ -47,6 +46,7 @@ export default {
 .Title {
     font-size: 14px;
     letter-spacing: 0.1em;
+    /* color:  */
 }
 
 .CreatedWrapper {
@@ -59,4 +59,6 @@ export default {
     letter-spacing: 0.1em;
 }
 
+@media (min-width: 768px) {
+}
 </style>

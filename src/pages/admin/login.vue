@@ -6,17 +6,18 @@
                 <div class="LoginFormWrapper">
                     <form>
                         <div class="LoginEmailWrapper">
-                            <input class="InputDefault" type="email" placeholder="Email" />
+                            <input class="InputDefault" v-model="email" type="email" placeholder="Email" />
                         </div>
                         <div class="LoginPassWrapper">
-                            <input class="InputDefault" type="password" placeholder="Password" />
+                            <input class="InputDefault" v-model="password" type="password" placeholder="Password" />
                         </div>
-                        <div class="LoginBtnWrapper">
-                            <BtnDefault :btnText="'ログイン'" v-on:click="login" />
+                        <div class="LoginBtnWrapper" @click="login">
+                            <BtnDefault :btnText="'ログイン'" />
                         </div>
-                        <div class="LoginBtnWrapper">
-                            <BtnDefault :btnText="'新規登録'" v-on:click="signup" />
+                        <div class="LoginBtnWrapper" @click="signup">
+                            <BtnDefault :btnText="'新規登録'" />
                         </div>
+                        <!-- <button type="submit">ログイン</button> -->
                     </form>
                 </div>
             </div>
@@ -26,20 +27,53 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import $toast from '@nuxtjs/toast'
+// import $cookies from "cookie-universal-nuxt";
+// declare module 'vue/types/vue' {
+//   interface Vue {
+//     $auth: any
+//   }
+// }
+
 export default Vue.extend({
   data() {
     return {
-
+        email: '',
+        password: ''
     }
   },
   props: [
   ],
   methods: {
-    login() {
-        console.log('login')
+    // async userLogin() {
+    //   try {
+    //     let response = await this.$auth.loginWith('local', { data: this.login })
+    //     console.log(response)
+    //   } catch (err) {
+    //     console.log(err)
+    //   }
+    // },
+    async login() {
+        const req = {
+            email: this.email,
+            password: this.password
+        }
+        if (req.email === "" || req.password === "") {
+            this.$toast.error("項目を入力してください")
+            return
+        }
+        await this.$store.dispatch('admin/login', req)
     },
     signup() {
-        console.log('signup')
+        const req = {
+            email: this.email,
+            password: this.password
+        }
+        if (req.email === "" || req.password === "") {
+            this.$toast.error("項目を入力してください")
+            return
+        }
+        this.$store.dispatch('admin/create', req)
     }
   }
 })
