@@ -68,28 +68,26 @@ export const actions: ActionTree<RootState, RootState> = {
             res.then((user: AdminUser) => {
                 commit('user', user)
             });
-            const loginRes = login(req.email, req.password)
-            loginRes.then((resToken: any) => {
-                if (!resToken.access_token) { return }
-                this.$cookies.set(cookieKeys.accessToken, resToken.access_token)
+            // const loginRes: Promise<any> = login(req.email, req.password)
+            // loginRes.then((resToken: any) => {
+            //     if (!resToken.access_token) { return }
+            //     this.$cookies.set(cookieKeys.accessToken, resToken.access_token)
 
-                const res: Promise<AdminUser> = getMe(resToken.access_token)
-                res.then((user: AdminUser) => {
-                    commit('user', user)
-                })
-            })
+            //     const res: Promise<AdminUser> = getMe(resToken.access_token)
+            //     res.then((user: AdminUser) => {
+            //         commit('user', user)
+            //     })
+            // })
         } catch(e) {
-            console.log(e)
             return e
         } finally {
-            this.$router.push("/article/all")
+            // this.$router.push("/article/all")
         }
     },
 
     async update({ commit, state }) {
         try {
         } catch(e) {
-            console.log(e)
         } finally {
 
         }
@@ -108,12 +106,12 @@ export const actions: ActionTree<RootState, RootState> = {
                 res.then((user: AdminUser) => {
                     commit('user', user)
                 })
+                this.$router.push("/article/all")
             })
         } catch(e) {
-            console.log(e)
             return e       
         } finally {
-            this.$router.push("/article/all")
+            // this.$router.push("/article/all")
         }
     },
 
@@ -122,7 +120,6 @@ export const actions: ActionTree<RootState, RootState> = {
             this.$cookies.remove(cookieKeys.accessToken)
             commit('user', {})
         } catch(e) {
-            console.log(e)
         } finally {
             this.$router.push("/article/all")
         }
@@ -132,7 +129,6 @@ export const actions: ActionTree<RootState, RootState> = {
         try {
             deleteArticle(id)
         } catch(e) {
-            console.log(e)
         } finally {
 
         }

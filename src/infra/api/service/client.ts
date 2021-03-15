@@ -14,8 +14,8 @@ interface IApiClient {
 }
 
 class ApiClient implements IApiClient {
-    // http://localhost:8080/twirp
-    // http://127.0.0.1:8080/twirp
+    // http://localhost:8000/twirp
+    // http://127.0.0.1:8000/twirp
     // http://ec2-18-177-59-95.ap-northeast-1.compute.amazonaws.com/twirp
     private baseURL: string = "http://ec2-18-177-59-95.ap-northeast-1.compute.amazonaws.com"
 
