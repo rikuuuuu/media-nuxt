@@ -51,39 +51,34 @@ class ApiClient implements IApiClient {
     }
 
     public postWithToken(path: string, token: string, body: any): Promise<any> {
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-        };
-
-        return this.postRequest(path, headers, body);
+        return this.postWithAuth(path, token, body);
     }
 
     private async postRequest(path: string, headers: any, body: any): Promise<any> {
 
         try {
-            const res = await axios.post(this.baseURL + path, body, headers);
+            const res = await axios.post(this.baseURL + path, body, headers)
             return res.data;
         } catch (error) {
             console.log(error);
             return error
         }
 
-        // const method = "POST";
+    }
 
-        // const option: RequestInit = {
-        //     body,
-        //     method,
-        //     headers,
-        //     mode: 'cors',
-        // };
+    private async postWithAuth(path: string, token: string, body: any): Promise<any> {
 
-        // const res = await fetch(this.baseURL + path, option);
-        // console.log("res", res);
-        // const buffer = await res.arrayBuffer();
-        // console.log("buffer", buffer);
-        // return new Uint8Array(buffer);
+        try {
+            const res = await axios.post(this.baseURL + path, body, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            return res.data;
+        } catch (error) {
+            console.log(error);
+            return error
+        }
 
     }
 

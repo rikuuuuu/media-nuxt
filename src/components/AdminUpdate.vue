@@ -7,7 +7,7 @@
                         <p class="LoginLabel">編集</p>
                     </div>
                     <div class="LoginNameWrapper">
-                        <input class="InputDefault" v-model="user.username" type="text" placeholder="ユーザーネーム" />
+                        <input class="InputDefault" v-model="user.name" type="text" placeholder="ユーザーネーム" />
                     </div>
                     <div class="LoginBtnWrapper" @click="update">
                         <BtnDefault :btnText="'更新する'" />
@@ -26,25 +26,24 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-        // username: "",
     }
   },
   props: [
     'user'  
   ],
-  created() {
-
+  created() { 
   },
   mounted() {
-
   },
   methods: {
     update() {
-        console.log('updateClick', this.user)
+        this.$store.dispatch('admin/update', this.user.name)
     },
     logout() {
         this.$store.dispatch('admin/logout')
     }
+  },
+  computed: {
   }
 })
 </script>

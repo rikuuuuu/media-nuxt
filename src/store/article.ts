@@ -7,6 +7,10 @@ import { IArticleRepository, TCreateArticleParams, TUpdateArticleParams } from '
 import { createArticleAPI } from '../infra/api/service/article_api';
 import { createApiClient, IApiClient } from '../infra/api/service/client';
 
+const cookieKeys = {
+    accessToken: 'ACCESS_TOKEN',
+};
+
 export const state = () => ({
     articles: [],
     article: {
@@ -69,6 +73,9 @@ export const actions: ActionTree<RootState, RootState> = {
 
     async create({ commit, state }, req: TCreateArticleParams) {
         try {
+            const accessToken = this.$cookies.get(cookieKeys.accessToken)
+            if (accessToken === "") {return}
+            req.token = accessToken
             const res: Promise<Article> = create(req)
             res.then((article: Article) => {
                 commit('article', article)

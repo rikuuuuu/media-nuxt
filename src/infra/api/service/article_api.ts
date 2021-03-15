@@ -89,7 +89,11 @@ class ArticleAPI implements IArticleRepository {
     public create(req: TCreateArticleParams): Promise<Article> {
         return new Promise<Article>(async (resolve, reject) => {
             try {
-                const res = await this.apiClient.post("/article/create", req);
+                const createReq = {
+                    title: req.title,
+                    description: req.description,
+                }
+                const res = await this.apiClient.postWithToken("/article/create", req.token, createReq);
                 const resConverted = ArticleConvertResponse.from(res);
                 const item: Article = Article.from(resConverted);
                 resolve(item);

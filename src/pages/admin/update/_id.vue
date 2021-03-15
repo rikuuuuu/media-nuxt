@@ -21,7 +21,13 @@ export default Vue.extend({
     },
     computed: {
         user() {
-            return this.$store.getters['admin/user']
+            // stateを変更するとエラーになるので
+            const item = this.$store.getters['admin/user']
+            const user = {
+                email: item.email,
+                name: item.name,
+            }
+            return user
         }
     }
 })

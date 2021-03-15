@@ -45,9 +45,9 @@ export default Vue.extend({
     methods: {
         create() {
             const req: TCreateArticleParams = {
+                "token": "",
                 "title": this.title,
                 "description": this.description,
-                "userID": "1",
             }
             this.$store.dispatch('article/create', req)
         },

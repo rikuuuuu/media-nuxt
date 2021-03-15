@@ -1,7 +1,7 @@
 <template>
     <div>
         <Header />
-        <ArticleUpdate :v-if="article" :article=article />
+        <ArticleUpdate v-if="article.id !== undefined" :article=article />
         <Footer />
     </div>
 </template>
@@ -23,7 +23,14 @@ export default Vue.extend({
     },
     computed: {
         article() {
-            return this.$store.getters['article/article']
+            const item = this.$store.getters['article/article']
+            const article = {
+                id: item.id,
+                title: item.title,
+                description: item.description,
+                userID: item.userID,
+            }
+            return article
         }
     },
 })

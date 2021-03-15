@@ -85,9 +85,24 @@ export const actions: ActionTree<RootState, RootState> = {
         }
     },
 
-    async update({ commit, state }) {
+    async update({ commit, state }, name) {
         try {
+            const accessToken = this.$cookies.get(cookieKeys.accessToken)
+            if (!accessToken) { 
+                console.log("ログインしてください")
+                return 
+            }
+            const req: TUpdateAdminUserParams = {
+                token: accessToken,
+                name: name,
+            }
+            const res: Promise<AdminUser> = update(req)
+            res.then((user: AdminUser) => {
+                commit('user', user)
+            })
+            this.$router.push("/article/all")
         } catch(e) {
+
         } finally {
 
         }

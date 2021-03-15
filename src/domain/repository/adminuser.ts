@@ -11,6 +11,6 @@ export interface IAdminUserRepository {
 }
 
 export type TUpdateAdminUserParams ={
-    id: string,
+    token: string,
     name: string
 }

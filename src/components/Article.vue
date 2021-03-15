@@ -10,10 +10,9 @@
                 <img class="Img" src="/fog.jpg" alt="">
             </div>
             <div class="DescriptionWrapper">
-                {{ article.description }}
-                <!-- <div class="marked" v-html="text">{{ article.description }}</div> -->
+                <div v-html="text"></div>
             </div>
-            <nuxt-link :to="{ name: 'article-update-id', params: { id: article.id }}" >
+            <nuxt-link v-if="Object.keys(user).length" :to="{ name: 'article-update-id', params: { id: article.id }}" >
                 <div class="BtnWrapper">
                     <BtnDefault :btnText="'編集'" />
                 </div>
@@ -24,11 +23,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// declare module 'vue/types/vue' {
-//   interface Vue {
-//     $marked: any
-//   }
-// }
 
 export default Vue.extend({
     data() {
@@ -37,18 +31,14 @@ export default Vue.extend({
         }
     },
     props: [
-        "article"
+        "article",
+        "user"
     ],
     mounted() {
     },
     computed: {
-        markedContent() {
-            // @ts-ignore
-            // return this.$marked(this.article.description)
-        },
         text() {
-            // @ts-ignore
-            // return this.$marked(this.article.description);
+            return this.$marked(this.article.description);
         }
     }
 })

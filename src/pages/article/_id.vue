@@ -4,7 +4,7 @@
         <div class="MainWrapper">
             <div class="ArticleContentWrapper">
                 <div class="LeftWrapper">
-                    <Article v-if=article :article=article />
+                    <Article v-if="article.id !== undefined" :article=article :user=user />
                 </div>
                 <MainRight :user=user />
             </div>
@@ -30,7 +30,14 @@ export default Vue.extend({
     },
     computed: {
         article() {
-            return this.$store.getters['article/article']
+            const item = this.$store.getters['article/article']
+            const article = {
+                id: item.id,
+                title: item.title,
+                description: item.description,
+                userID: item.userID,
+            }
+            return article
         },
         user() {
             return this.$store.getters['admin/user']

@@ -10,14 +10,16 @@ export interface IArticleRepository {
 }
 
 export type TCreateArticleParams = {
+    "token": string,
     "title": string,
     "description": string,
-    "userID": string,
+    // "userID": string,
     // thumbnailURL: string,
     // createdAt: string
 }
 
 export type TUpdateArticleParams = {
+    "token": string,
     articleId: string,
     title: string,
     description: string,
