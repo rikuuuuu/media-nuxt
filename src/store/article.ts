@@ -72,7 +72,6 @@ export const actions: ActionTree<RootState, RootState> = {
             const res: Promise<Article> = create(req)
             res.then((article: Article) => {
                 commit('article', article)
-                this.$router.push("/article/all")
             });
         } catch(e) {
             console.log(e)

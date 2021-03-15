@@ -53,7 +53,7 @@ export default Vue.extend({
     //     console.log(err)
     //   }
     // },
-    login() {
+    async login() {
         const req = {
             email: this.email,
             password: this.password
@@ -62,7 +62,7 @@ export default Vue.extend({
             this.$toast.error("項目を入力してください")
             return
         }
-        this.$store.dispatch('admin/login', req)
+        await this.$store.dispatch('admin/login', req)
     },
     signup() {
         const req = {
