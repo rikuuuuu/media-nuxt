@@ -47,6 +47,7 @@ export default {
     // '@nuxtjs/auth'
     'cookie-universal-nuxt',
     '@nuxtjs/toast',
+    '@nuxtjs/dotenv',
   ],
   toast: {
     position: 'top-right',

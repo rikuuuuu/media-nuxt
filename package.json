@@ -11,6 +11,7 @@
   "dependencies": {
     "@nuxt/typescript-runtime": "^2.0.1",
     "@nuxtjs/auth": "^4.9.1",
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/toast": "^3.3.1",
     "@types/node": "^14.14.31",
     "axios": "^0.21.1",
