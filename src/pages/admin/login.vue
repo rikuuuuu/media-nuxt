@@ -17,7 +17,6 @@
                         <div class="LoginBtnWrapper" @click="signup">
                             <BtnDefault :btnText="'新規登録'" />
                         </div>
-                        <!-- <button type="submit">ログイン</button> -->
                     </form>
                 </div>
             </div>
@@ -28,12 +27,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import $toast from '@nuxtjs/toast'
-// import $cookies from "cookie-universal-nuxt";
-// declare module 'vue/types/vue' {
-//   interface Vue {
-//     $auth: any
-//   }
-// }
 
 export default Vue.extend({
   data() {
@@ -45,15 +38,7 @@ export default Vue.extend({
   props: [
   ],
   methods: {
-    // async userLogin() {
-    //   try {
-    //     let response = await this.$auth.loginWith('local', { data: this.login })
-    //     console.log(response)
-    //   } catch (err) {
-    //     console.log(err)
-    //   }
-    // },
-    login() {
+    async login() {
         const req = {
             email: this.email,
             password: this.password
@@ -62,9 +47,21 @@ export default Vue.extend({
             this.$toast.error("項目を入力してください")
             return
         }
-        this.$store.dispatch('admin/login', req)
+        if (req.password.length < 8) {
+            this.$toast.error("パスワードを８文字以上で入力してください")
+            return
+        }
+
+        try {
+            await this.$store.dispatch('admin/login', req)
+            this.$toast.success("ログインしました")
+        } catch (e) {
+            console.log("catch", e)
+            this.$toast.error("ログインに失敗しました")
+        }
+
     },
-    signup() {
+    async signup() {
         const req = {
             email: this.email,
             password: this.password
@@ -73,7 +70,17 @@ export default Vue.extend({
             this.$toast.error("項目を入力してください")
             return
         }
-        this.$store.dispatch('admin/create', req)
+        if (req.password.length < 8) {
+            this.$toast.error("パスワードを８文字以上で入力してください")
+            return
+        }
+        try {
+            await this.$store.dispatch('admin/create', req)
+            this.$toast.success("新規登録しました")
+        } catch (e) {
+            console.log("catch", e)
+            this.$toast.error("新規登録に失敗しました")
+        }
     }
   }
 })
@@ -99,9 +106,9 @@ export default Vue.extend({
     padding: 50px;
 }
 
-.LoginFormWrapper {
+/* .LoginFormWrapper {
 
-}
+} */
 
 .LoginEmailWrapper {
     margin: 0 auto 50px;

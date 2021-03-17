@@ -35,33 +35,44 @@ import { TCreateArticleParams, TUpdateArticleParams } from '../domain/repository
 export default Vue.extend({
     data() {
         return {
-            // title: "",
-            // description: "",
         }
     },
     created() {
         
     },
     mounted() {
-        // console.log("article ", this.article)
-        // this.title = this.article.title
-        // this.description = this.article.description
     },
     props: [
         'article',
     ],
     methods: {
-        update() {
-            // const req: TUpdateArticleParams = {
-            //     "id": article.id
-            //     "title": this.title,
-            //     "description": this.description,
-            // }
-            // this.$store.dispatch('article/create', req)
+        async update() {
+            if (this.article.title === "" || this.article.description === "") {
+                this.$toast.error("入力されていません")
+                return
+            }
+            const req = {
+                "id": this.article.id,
+                "title": this.article.title,
+                "description": this.article.description,
+            }
+            try {
+                await this.$store.dispatch('article/create', req)
+                this.$toast.success("更新しました")
+            } catch (e) {
+                this.$toast.error("更新できませんでした")
+            }
         },
-        deleteArticle() {
-            this.$store.dispatch('article/delete', this.article.id)
-            this.$router.push('/article/all')
+        async deleteArticle() {
+            if (!window.confirm('投稿を削除しますか？')) {
+                return
+            }
+            try {
+                await this.$store.dispatch('article/delete', this.article.id)
+                this.$toast.success("削除しました")
+            } catch (e) {
+                this.$toast.error("削除できませんでした")
+            }
         }
     }
 })

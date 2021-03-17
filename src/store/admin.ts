@@ -35,15 +35,14 @@ export const actions: ActionTree<RootState, RootState> = {
         try {
             const accessToken = this.$cookies.get(cookieKeys.accessToken)
             if (!accessToken) { 
-                console.log("ログインしてください")
-                return 
+                console.log("ログインしていません")
+                return
             }
-            const res: Promise<AdminUser> = getMe(accessToken)
-            res.then((user: AdminUser) => {
-                commit('user', user)
-            })
+            const user = await getMe(accessToken)
+            commit('user', user)
         } catch(e) {
-            console.log(e)
+            console.log("ユーザー情報を取得できませんでした", e)
+            throw new Error()
         } finally {
 
         }
@@ -64,24 +63,22 @@ export const actions: ActionTree<RootState, RootState> = {
 
     async create({ commit, state }, req) {
         try {
-            const res: Promise<AdminUser> = create(req.email, req.password)
-            res.then((user: AdminUser) => {
-                commit('user', user)
-            });
-            // const loginRes: Promise<any> = login(req.email, req.password)
-            // loginRes.then((resToken: any) => {
-            //     if (!resToken.access_token) { return }
-            //     this.$cookies.set(cookieKeys.accessToken, resToken.access_token)
+            const user = await create(req.email, req.password)
+            commit('user', user)
 
-            //     const res: Promise<AdminUser> = getMe(resToken.access_token)
-            //     res.then((user: AdminUser) => {
-            //         commit('user', user)
-            //     })
-            // })
+            const res = await login(req.email, req.password)
+            if (!res.access_token) { 
+                throw new Error()
+            }
+            this.$cookies.set(cookieKeys.accessToken, res.access_token)
+
+            const me = await getMe(res.access_token)
+            commit('user', me)
+
+            this.$router.push("/article/all")
         } catch(e) {
-            return e
+            throw new Error(e)
         } finally {
-            // this.$router.push("/article/all")
         }
     },
 
@@ -89,20 +86,18 @@ export const actions: ActionTree<RootState, RootState> = {
         try {
             const accessToken = this.$cookies.get(cookieKeys.accessToken)
             if (!accessToken) { 
-                console.log("ログインしてください")
-                return 
+                throw new Error()
             }
             const req: TUpdateAdminUserParams = {
                 token: accessToken,
                 name: name,
             }
-            const res: Promise<AdminUser> = update(req)
-            res.then((user: AdminUser) => {
-                commit('user', user)
-            })
+            const user = await update(req)
+            commit('user', user)
+
             this.$router.push("/article/all")
         } catch(e) {
-
+            throw new Error(e)
         } finally {
 
         }
@@ -110,40 +105,51 @@ export const actions: ActionTree<RootState, RootState> = {
 
     async login({ commit, state }, req) {
         try {
-            // const accessToken = this.$cookies.get(cookieKeys.accessToken)
-            // if (accessToken) { return }
-            const res: Promise<any> = login(req.email, req.password)
-            res.then((resToken: any) => {
-                if (!resToken.access_token) { return }
-                this.$cookies.set(cookieKeys.accessToken, resToken.access_token)
 
-                const res: Promise<AdminUser> = getMe(resToken.access_token)
-                res.then((user: AdminUser) => {
-                    commit('user', user)
-                })
-                this.$router.push("/article/all")
-            })
+            const res = await login(req.email, req.password)
+            if (!res.access_token) { 
+                throw new Error()
+            }
+            this.$cookies.set(cookieKeys.accessToken, res.access_token)
+
+            const user = await getMe(res.access_token)
+            commit('user', user)
+
+            this.$router.push("/article/all")
+
         } catch(e) {
-            return e       
+            throw new Error(e)
         } finally {
-            // this.$router.push("/article/all")
         }
     },
 
     async logout({ commit, state }, id) {
         try {
+            const token = this.$cookies.get(cookieKeys.accessToken)
+            if (!token) {
+                throw new Error()
+            }
             this.$cookies.remove(cookieKeys.accessToken)
             commit('user', {})
-        } catch(e) {
-        } finally {
             this.$router.push("/article/all")
+        } catch(e) {
+            throw new Error(e)
+        } finally {
         }
     },
 
     async delete({ commit, state }, id) {
         try {
-            deleteArticle(id)
+            const token = this.$cookies.get(cookieKeys.accessToken)
+            if (!token) {
+                throw new Error()
+            }
+            await deleteAccount(token)
+            this.$cookies.remove(cookieKeys.accessToken)
+            commit('user', {})
+            this.$router.push("/article/all")
         } catch(e) {
+            throw new Error(e)
         } finally {
 
         }
@@ -174,6 +180,6 @@ const login = (email: string, password: string): Promise<any> => {
 //     return adminuserRepository.getMe()
 // }
 
-const deleteArticle = (articleID: string): Promise<void> => {
-    return adminuserRepository.delete(articleID)
+const deleteAccount = (token: string): Promise<void> => {
+    return adminuserRepository.delete(token)
 }

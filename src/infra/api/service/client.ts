@@ -17,83 +17,45 @@ class ApiClient implements IApiClient {
 
     private baseURL: string | undefined = process.env.BASE_URL
 
-    public get(path: string): Promise<any> {
+    public async get(path: string): Promise<any> {
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         };
-        
-        return this.getRequest(path, headers);
+
+        try {
+            const res = await axios.get(this.baseURL + path, {headers});
+            return res.data;
+        } catch (error) {
+            return error
+        }       
     }
 
-    public post(path: string, body: any): Promise<any> {
+    public async post(path: string, body: any): Promise<any> {
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         };
-        
-        return this.postRequest(path, headers, body);
+
+        const res = await axios.post(this.baseURL + path, body, {headers})
+        return res.data;       
     }
 
-    public login(path: string, body: any): Promise<any> {
+    public async login(path: string, body: any): Promise<any> {
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded',
         };
-        
-        return this.loginRequest(path, headers, body);
+
+        let params = new URLSearchParams();
+        params.append('username', body.username);
+        params.append('password', body.password);
+
+        const res = await axios.post(this.baseURL + path, params, {headers});
+        return res.data;
     }
 
-    public getWithToken(path: string, token: string): Promise<any> {
-        return this.getWithAuth(path, token)
-    }
-
-    public postWithToken(path: string, token: string, body: any): Promise<any> {
-        return this.postWithAuth(path, token, body);
-    }
-
-    private async postRequest(path: string, headers: any, body: any): Promise<any> {
-
-        try {
-            const res = await axios.post(this.baseURL + path, body, headers)
-            return res.data;
-        } catch (error) {
-            console.log(error);
-            return error
-        }
-
-    }
-
-    private async postWithAuth(path: string, token: string, body: any): Promise<any> {
-
-        try {
-            const res = await axios.post(this.baseURL + path, body, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
-            return res.data;
-        } catch (error) {
-            console.log(error);
-            return error
-        }
-
-    }
-
-    private async getRequest(path: string, headers: any): Promise<any> {
-
-        try {
-            const res = await axios.get(this.baseURL + path, headers);
-            return res.data;
-        } catch (error) {
-            console.log(error);
-            return error
-        }
-
-    }
-
-    private async getWithAuth(path: string, token: string): Promise<any> {
-
+    public async getWithToken(path: string, token: string): Promise<any> {
         try {
             const res = await axios.get(this.baseURL + path, {
                 headers: {
@@ -102,31 +64,17 @@ class ApiClient implements IApiClient {
             });
             return res.data;
         } catch (error) {
-            console.log(error);
             return error
         }
-
     }
 
-    private async loginRequest(path: string, headers: any, body: any): Promise<any> {
-
-        let params = new URLSearchParams();
-        params.append('username', body.username);
-        params.append('password', body.password);
-
-        if (!body.username) {
-            console.log("not username")
-            return
-        }
-
-        try {
-            const res = await axios.post(this.baseURL + path, params, headers);
-            return res.data;
-        } catch (error) {
-            console.log(error);
-            return error
-        }
-
+    public async postWithToken(path: string, token: string, body: any): Promise<any> {
+        const res = await axios.post(this.baseURL + path, body, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        return res.data;
     }
 }
 

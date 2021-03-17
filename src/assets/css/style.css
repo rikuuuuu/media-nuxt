@@ -85,9 +85,9 @@ h2 {
   color: #FFF;
   padding: 0.5em;
   margin: 2.5em 0 0.7em;
-  font-size: 1.3em;
+  font-size: 1.2em;
   line-height: 1.6;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 h3 {
@@ -139,7 +139,7 @@ input::placeholder {
   background-color: #FFF;
   background-color: #5da67f;
   color: #FFF;
-  border-radius: 5px;
+  border-radius: 3px;
   border: none;
   cursor: pointer;
   display: block;

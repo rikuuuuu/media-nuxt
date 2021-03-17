@@ -6,7 +6,7 @@ export interface IArticleRepository {
     getAll(page: number, offset: number): Promise<Article[]>;
     create(createArticleParams: TCreateArticleParams): Promise<Article>;
     update(updateArticleParams: TUpdateArticleParams): Promise<Article>;
-    delete(articleID: string): Promise<void>;
+    delete(articleID: string, token: string): Promise<void>;
 }
 
 export type TCreateArticleParams = {
@@ -20,8 +20,8 @@ export type TCreateArticleParams = {
 
 export type TUpdateArticleParams = {
     "token": string,
-    articleId: string,
-    title: string,
-    description: string,
+    "id": string,
+    "title": string,
+    "description": string,
     // thumbnailURL: string,
 }

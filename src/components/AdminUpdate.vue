@@ -15,6 +15,9 @@
                     <div class="LoginBtnWrapper" @click="logout">
                         <BtnDefault :btnText="'ログアウト'" />
                     </div>
+                    <div class="LoginBtnWrapper" @click="deleteAccount">
+                        <BtnDefault :btnText="'アカウント削除'" />
+                    </div>
                 </form>
             </div>
         </div>
@@ -36,11 +39,33 @@ export default Vue.extend({
   mounted() {
   },
   methods: {
-    update() {
-        this.$store.dispatch('admin/update', this.user.name)
+    async update() {
+        if (this.user.name == "") {
+            this.$toast.error("入力されていません")
+            return
+        }
+        try {
+            await this.$store.dispatch('admin/update', this.user.name)
+            this.$toast.success("更新しました")
+        } catch (e) {
+            this.$toast.error("更新できませんでした")
+        }
     },
-    logout() {
-        this.$store.dispatch('admin/logout')
+    async logout() {
+        try {
+            await this.$store.dispatch('admin/logout')
+            this.$toast.success("ログアウトしました")
+        } catch (e) {
+            this.$toast.error("ログアウトできませんでした")
+        }
+    },
+    async deleteAccount() {
+        try {
+            await this.$store.dispatch('admin/delete')
+            this.$toast.success("削除しました")
+        } catch (e) {
+            this.$toast.error("削除できませんでした")
+        }
     }
   },
   computed: {
