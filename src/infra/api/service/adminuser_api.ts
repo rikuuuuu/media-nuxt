@@ -28,7 +28,7 @@ class AdminUserAPI implements IAdminUserRepository {
                     username: email,
                     password: password,
                 }
-                const res = await this.apiClient.login("/token", req);
+                const res: Promise<any> = this.apiClient.login("/token", req);
                 resolve(res);
             } catch (error) {
                 reject(error);
@@ -36,10 +36,10 @@ class AdminUserAPI implements IAdminUserRepository {
         });
     }
 
-    public logout(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-        })
-    }
+    // public logout(): Promise<void> {
+    //     return new Promise<void>((resolve, reject) => {
+    //     })
+    // }
 
     public create(email: string, password: string): Promise<any> {
         return new Promise<any>(async (resolve, reject) => {
@@ -76,8 +76,16 @@ class AdminUserAPI implements IAdminUserRepository {
         })
     }
 
-    public delete(userID: string): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
+    public delete(token: string): Promise<void> {
+        return new Promise<void>(async (resolve, reject) => {
+            try {
+                const req = {}
+                await this.apiClient.postWithToken("/user/delete", token, req);
+                resolve()
+            } catch (error) {
+                reject(error);
+            }
+            return
         });
     }
 

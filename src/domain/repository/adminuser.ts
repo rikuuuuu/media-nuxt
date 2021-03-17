@@ -6,8 +6,8 @@ export interface IAdminUserRepository {
     create(email: string, password: string): Promise<AdminUser>;
     update(updateAdminUserParams: TUpdateAdminUserParams): Promise<AdminUser>;
     login(email: string, password: string): Promise<any>;
-    logout(): Promise<void>;
-    delete(userID: string): Promise<void>;
+    // logout(): Promise<void>;
+    delete(token: string): Promise<void>;
 }
 
 export type TUpdateAdminUserParams ={

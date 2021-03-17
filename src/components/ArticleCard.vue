@@ -54,8 +54,8 @@ export default {
 }
 
 .Created {
-    font-size: 14px;
-    color: "AAA";
+    font-size: 10px;
+    color: #AAA;
     letter-spacing: 0.1em;
 }
 

@@ -13,14 +13,7 @@ const cookieKeys = {
 
 export const state = () => ({
     articles: [],
-    article: {
-        // id: "",
-        // title: "",
-        // description: "",
-        // userID: "",
-        // createdAt: "",
-        // updatedAt: "",
-    },
+    article: {},
 })
 
 export type RootState = ReturnType<typeof state>
@@ -32,27 +25,17 @@ export const getters: GetterTree<RootState, RootState> = {
 
 export const mutations: MutationTree<RootState> = {
     articles: (state, articles) => (state.articles = articles),
-    article: (state, article) => (
-        state.article = article
-        // state.article.id = article.id,
-        // state.article.title = article.title,
-        // state.article.description = article.description,
-        // state.article.userID = article.userID,
-        // state.article.createdAt = article.createdAt,
-        // state.article.updatedAt = article.updatedAt
-    ),
+    article: (state, article) => (state.article = article),
 }
 
 export const actions: ActionTree<RootState, RootState> = {
 
     async get({ commit, state }, { articleID }) {
         try {
-            const res: Promise<Article> = getArticle(articleID)
-            res.then((article: Article) => {
-                commit('article', article)
-            });
+            const article = await getArticle(articleID)
+            commit('article', article)
         } catch(e) {
-            console.log(e)
+            throw new Error(e)
         } finally {
 
         }
@@ -60,12 +43,10 @@ export const actions: ActionTree<RootState, RootState> = {
     
     async getAll({ commit, state }) {
         try {
-            const res: Promise<Article[]> = getAllArticle(1, 1)
-            res.then((articles: Article[]) => {
-                commit('articles', articles)
-            });
+            const articles = await getAllArticle(1, 1)
+            commit('articles', articles)
         } catch(e) {
-            console.log(e)
+            throw new Error(e)
         } finally {
 
         }
@@ -74,28 +55,38 @@ export const actions: ActionTree<RootState, RootState> = {
     async create({ commit, state }, req: TCreateArticleParams) {
         try {
             const accessToken = this.$cookies.get(cookieKeys.accessToken)
-            if (accessToken === "") {return}
+            if (accessToken === "") {
+                throw new Error()
+            }
             req.token = accessToken
-            const res: Promise<Article> = create(req)
-            res.then((article: Article) => {
-                commit('article', article)
-                this.$router.push("/article/all")
-            });
+            const article = await create(req)
+            commit('article', article)
+            this.$router.push("/article/all")
         } catch(e) {
-            console.log(e)
+            throw new Error(e)
         } finally {
 
         }
     },
 
-    async update({ commit, state }, req: TUpdateArticleParams) {
+    async update({ commit, state }, req) {
         try {
-            const res: Promise<Article> = update(req)
-            res.then((article: Article) => {
-                commit('article', article)
-            });
+            const accessToken = this.$cookies.get(cookieKeys.accessToken)
+            if (!accessToken) { 
+                console.log("ログインしていません")
+                throw new Error()
+            }
+            const updateReq: TUpdateArticleParams = {
+                "token": accessToken,
+                "id": req.id,
+                "title": req.title,
+                "description": req.description,
+            }
+            const article = await update(updateReq)
+            commit('article', article)
+            this.$router.push("/article/all")
         } catch(e) {
-            console.log(e)
+            throw new Error(e)
         } finally {
 
         }
@@ -103,9 +94,16 @@ export const actions: ActionTree<RootState, RootState> = {
 
     async delete({ commit, state }, id) {
         try {
-            deleteArticle(id)
+            const accessToken = this.$cookies.get(cookieKeys.accessToken)
+            if (!accessToken) { 
+                console.log("ログインしていません")
+                throw new Error()
+            }
+            await deleteArticle(id, accessToken)
+            commit('article', {})
+            this.$router.push("/article/all")
         } catch(e) {
-            console.log(e)
+            throw new Error(e)
         } finally {
 
         }
@@ -121,7 +119,7 @@ const getArticle = (id: string): Promise<Article> => {
 }
 
 const getAllArticle = (pager: number, offset: number): Promise<Article[]> => {
-    return articleRepository.getAll(pager, pager);
+    return articleRepository.getAll(pager, offset);
 }
 
 const create = (req: TCreateArticleParams): Promise<Article> => {
@@ -132,6 +130,6 @@ const update = (req: TUpdateArticleParams): Promise<Article> => {
     return articleRepository.update(req)
 }
 
-const deleteArticle = (articleID: string): Promise<void> => {
-    return articleRepository.delete(articleID)
+const deleteArticle = (articleID: string, token: string): Promise<void> => {
+    return articleRepository.delete(articleID, token)
 }

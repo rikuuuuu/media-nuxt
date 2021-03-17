@@ -30,7 +30,11 @@
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({})
+export default Vue.extend({
+  fetch({ redirect }) {
+    redirect(301, '/article/all')
+  }
+})
 </script>
 
 
