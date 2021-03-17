@@ -1,6 +1,5 @@
 export const strict = false
 
-import { stringify } from 'node:querystring';
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import { Article } from '../domain/model/article';
 import { IArticleRepository, TCreateArticleParams, TUpdateArticleParams } from '../domain/repository/article_repository';
