@@ -1,5 +1,3 @@
-// import { entity } from "../rpc/api";
-
 class AdminUserConvertResponse {
     public static from(from: any): AdminUserConvertResponse {
         return new AdminUserConvertResponse(

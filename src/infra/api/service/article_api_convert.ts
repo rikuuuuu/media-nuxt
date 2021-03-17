@@ -1,7 +1,3 @@
-// import {article} from "../rpc/api"
-// import { Article } from '../../../domain/model/article';
-import { entity } from "../rpc/api";
-
 class ArticleConvertResponse {
     public static from(from: any): ArticleConvertResponse {
         return new ArticleConvertResponse(
