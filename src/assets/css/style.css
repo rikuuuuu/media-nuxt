@@ -116,6 +116,7 @@ p {
 
 img {
   width: 100%;
+  object-fit: cover;
 }
 
 input::placeholder {
@@ -145,4 +146,10 @@ input::placeholder {
   display: block;
   width: -webkit-fill-available;
   width: 100%;
+}
+
+.BtnSecond {
+  background: #FFF;
+  color: #5da67f;
+  border: 1px solid #5da67f;
 }

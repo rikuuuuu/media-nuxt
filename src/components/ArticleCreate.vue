@@ -6,8 +6,9 @@
                     <div class="ImageTitle">
                         サムネイル画像
                     </div>
-                    <img class="Img" src="/fog.jpg" alt="">
-                    <input type="file">
+                    <img v-if="!thumbnailURL" class="Img" src="/fog.jpg" alt="">
+                    <img v-if="thumbnailURL" class="Img" :src="thumbnailURL" alt="">
+                    <input @change="changeFile" type="file">
                 </div>
                 <div class="TitleWrapper">
                     <input class="InputDefault" v-model="title" type="text" placeholder="タイトル">
@@ -34,6 +35,8 @@ export default Vue.extend({
         return {
             title: "",
             description: "",
+            uploadfile: {},
+            thumbnailURL: "",
         }
     },
     created() {
@@ -48,8 +51,21 @@ export default Vue.extend({
                 "token": "",
                 "title": this.title,
                 "description": this.description,
+                "thumbnailURL": this.thumbnailURL,
             }
             this.$store.dispatch('article/create', req)
+        },
+        async changeFile(e: any) {
+            const files = e.target.files || e.dataTransfer.files;
+            this.uploadfile = files[0];
+
+            try {
+                const url = await this.$store.dispatch('article/imgUpload', this.uploadfile)
+                this.thumbnailURL = url
+                this.$toast.success("画像をアップロードしました")
+            } catch (e) {
+                this.$toast.error("画像をアップロードできませんでした")
+            }
         },
     }
 })

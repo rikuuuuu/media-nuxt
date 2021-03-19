@@ -7,15 +7,14 @@ export interface IArticleRepository {
     create(createArticleParams: TCreateArticleParams): Promise<Article>;
     update(updateArticleParams: TUpdateArticleParams): Promise<Article>;
     delete(articleID: string, token: string): Promise<void>;
+    imgUpload(file: any, tokne: string): Promise<any>;
 }
 
 export type TCreateArticleParams = {
     "token": string,
     "title": string,
     "description": string,
-    // "userID": string,
-    // thumbnailURL: string,
-    // createdAt: string
+    "thumbnailURL": string,
 }
 
 export type TUpdateArticleParams = {
@@ -23,5 +22,5 @@ export type TUpdateArticleParams = {
     "id": string,
     "title": string,
     "description": string,
-    // thumbnailURL: string,
+    "thumbnailURL": string,
 }

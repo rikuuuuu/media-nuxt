@@ -45,8 +45,9 @@ class ArticleAPI implements IArticleRepository {
         return new Promise<Article>(async (resolve, reject) => {
             try {
                 const createReq = {
-                    title: req.title,
-                    description: req.description,
+                    "title": req.title,
+                    "description": req.description,
+                    "thumbnailURL": req.thumbnailURL,
                 }
                 const res = await this.apiClient.postWithToken("/article/create", req.token, createReq);
                 const resConverted = ArticleConvertResponse.from(res);
@@ -64,7 +65,8 @@ class ArticleAPI implements IArticleRepository {
                 const updateReq = {
                     "id": req.id,
                     "title": req.title,
-                    "description": req.description
+                    "description": req.description,
+                    "thumbnailURL": req.thumbnailURL,
                 }
                 const res = await this.apiClient.postWithToken("/article/update", req.token, updateReq);
                 const resConverted = ArticleConvertResponse.from(res);
@@ -89,6 +91,20 @@ class ArticleAPI implements IArticleRepository {
             }
         });
     }
+
+    public imgUpload(file: any, token: string): Promise<any> {
+        return new Promise<any>(async (resolve, reject) => {
+            try {
+                const req = {
+                    file: file
+                }
+                const res = await this.apiClient.imgUpload("/image/upload", token, req)
+                resolve(res);
+            } catch (error) {
+                reject(error)
+            }
+        })
+    } 
 
 }
 

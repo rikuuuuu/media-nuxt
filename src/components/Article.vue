@@ -7,12 +7,13 @@
                 </div>
             </div>
             <div class="ImgWrapper">
-                <img class="Img" src="/fog.jpg" alt="">
+                <img v-if="!article.thumbnailURL" class="Img" src="/fog.jpg" alt="">
+                <img v-if="article.thumbnailURL" class="Img" :src="article.thumbnailURL" alt="">
             </div>
             <div class="DescriptionWrapper">
                 <div v-html="text"></div>
             </div>
-            <nuxt-link v-if="Object.keys(user).length" :to="{ name: 'article-update-id', params: { id: article.id }}" >
+            <nuxt-link v-if="Object.keys(user).length && String(user.id) === String(article.userID)" :to="{ name: 'article-update-id', params: { id: article.id }}" >
                 <div class="BtnWrapper">
                     <BtnDefault :btnText="'編集'" />
                 </div>
@@ -78,10 +79,10 @@ export default Vue.extend({
 
 .Img {
     width: 100%;
-    max-height: 450px;
+    height: 25em;
+    max-height: 400px;
     border-radius: 5px;
     overflow: hidden;
-    object-fit: cover;
 }
 
 .DescriptionWrapper {

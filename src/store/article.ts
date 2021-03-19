@@ -68,20 +68,15 @@ export const actions: ActionTree<RootState, RootState> = {
         }
     },
 
-    async update({ commit, state }, req) {
+    async update({ commit, state }, req: TUpdateArticleParams) {
         try {
             const accessToken = this.$cookies.get(cookieKeys.accessToken)
             if (!accessToken) { 
                 console.log("ログインしていません")
                 throw new Error()
             }
-            const updateReq: TUpdateArticleParams = {
-                "token": accessToken,
-                "id": req.id,
-                "title": req.title,
-                "description": req.description,
-            }
-            const article = await update(updateReq)
+            req.token = accessToken
+            const article = await update(req)
             commit('article', article)
             this.$router.push("/article/all")
         } catch(e) {
@@ -101,6 +96,22 @@ export const actions: ActionTree<RootState, RootState> = {
             await deleteArticle(id, accessToken)
             commit('article', {})
             this.$router.push("/article/all")
+        } catch(e) {
+            throw new Error(e)
+        } finally {
+
+        }
+    },
+
+    async imgUpload({ commit, state }, file) {
+        try {
+            const accessToken = this.$cookies.get(cookieKeys.accessToken)
+            if (!accessToken) { 
+                console.log("ログインしていません")
+                throw new Error()
+            }
+            const res = await imgUpload(file, accessToken)
+            return res
         } catch(e) {
             throw new Error(e)
         } finally {
@@ -131,4 +142,8 @@ const update = (req: TUpdateArticleParams): Promise<Article> => {
 
 const deleteArticle = (articleID: string, token: string): Promise<void> => {
     return articleRepository.delete(articleID, token)
+}
+
+const imgUpload = (file: any, token: string): Promise<void> => {
+    return articleRepository.imgUpload(file, token)
 }

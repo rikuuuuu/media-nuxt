@@ -11,6 +11,8 @@ interface IApiClient {
     getWithToken(path: string, token: string): Promise<any>;
 
     postWithToken(path: string, token: string, body: any): Promise<any>;
+
+    imgUpload(path: string, token: string, body: any): Promise<any>;
 }
 
 class ApiClient implements IApiClient {
@@ -74,6 +76,20 @@ class ApiClient implements IApiClient {
                 Authorization: `Bearer ${token}`,
             }
         });
+        return res.data;
+    }
+
+    public async imgUpload(path: string, token: string, body: any): Promise<any> {
+
+        let params = new FormData();
+        params.append('file', body.file);
+
+        const headers = {
+            'Authorization': `Bearer ${token}`,
+            'content-type': 'multipart/form-data',
+        };
+
+        const res = await axios.post(this.baseURL + path, params, {headers})
         return res.data;
     }
 }

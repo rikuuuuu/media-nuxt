@@ -29,6 +29,7 @@ export default Vue.extend({
                 title: item.title,
                 description: item.description,
                 userID: item.userID,
+                thumbnailURL: item.thumbnailURL,
             }
             return article
         }

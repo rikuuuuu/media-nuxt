@@ -16,7 +16,7 @@
                         <BtnDefault :btnText="'ログアウト'" />
                     </div>
                     <div class="LoginBtnWrapper" @click="deleteAccount">
-                        <BtnDefault :btnText="'アカウント削除'" />
+                        <BtnDefault class="BtnSecond" :btnText="'アカウント削除'" />
                     </div>
                 </form>
             </div>

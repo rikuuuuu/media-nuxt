@@ -1,8 +1,9 @@
 <template>
-    <nuxt-link :to=article.id>
+    <nuxt-link :to="{ name: 'article-id', params: { id: article.id }}">
         <div class="">
             <div class="ImgWrapper">
-                <img src="/fog.jpg" alt="">
+                <img v-if="!article.thumbnailURL" class="Img" src="/fog.jpg" alt="">
+                <img v-if="article.thumbnailURL" class="Img" :src="article.thumbnailURL" alt="">
             </div>
             <div class="ContentWrapper">
                 <div class="TitleWrapper">
@@ -57,6 +58,10 @@ export default {
     font-size: 10px;
     color: #AAA;
     letter-spacing: 0.1em;
+}
+
+.Img {
+    height: 14em;
 }
 
 @media (min-width: 768px) {

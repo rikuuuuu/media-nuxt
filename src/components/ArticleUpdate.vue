@@ -6,8 +6,9 @@
                     <div class="ImageTitle">
                         サムネイル画像
                     </div>
-                    <img class="Img" src="/fog.jpg" alt="">
-                    <input type="file">
+                    <img v-if="!thumbnailURL" class="Img" src="/fog.jpg" alt="">
+                    <img v-if="thumbnailURL" class="Img" :src="thumbnailURL" alt="">
+                    <input @change="changeFile" type="file">
                 </div>
                 <div class="TitleWrapper">
                     <input class="InputDefault" v-model="article.title" type="text" placeholder="タイトル">
@@ -21,7 +22,7 @@
                     <BtnDefault :btnText="'更新する'" />
                 </div>
                 <div class="CreateBtnWrapper" @click="deleteArticle">
-                    <BtnDefault :btnText="'削除する'" />
+                    <BtnDefault class="BtnSecond" :btnText="'削除する'" />
                 </div>
             </form>
         </div>
@@ -35,6 +36,8 @@ import { TCreateArticleParams, TUpdateArticleParams } from '../domain/repository
 export default Vue.extend({
     data() {
         return {
+            uploadfile: {},
+            thumbnailURL: this.article.thumbnailURL,
         }
     },
     created() {
@@ -46,18 +49,32 @@ export default Vue.extend({
         'article',
     ],
     methods: {
+        async changeFile(e: any) {
+            const files = e.target.files || e.dataTransfer.files;
+            this.uploadfile = files[0];
+
+            try {
+                const url = await this.$store.dispatch('article/imgUpload', this.uploadfile)
+                this.thumbnailURL = url
+                this.$toast.success("画像をアップロードしました")
+            } catch (e) {
+                this.$toast.error("画像をアップロードできませんでした")
+            }
+        },
         async update() {
             if (this.article.title === "" || this.article.description === "") {
                 this.$toast.error("入力されていません")
                 return
             }
-            const req = {
+            const req: TUpdateArticleParams = {
+                "token": "",
                 "id": this.article.id,
                 "title": this.article.title,
                 "description": this.article.description,
+                "thumbnailURL": this.thumbnailURL,
             }
             try {
-                await this.$store.dispatch('article/create', req)
+                await this.$store.dispatch('article/update', req)
                 this.$toast.success("更新しました")
             } catch (e) {
                 this.$toast.error("更新できませんでした")
